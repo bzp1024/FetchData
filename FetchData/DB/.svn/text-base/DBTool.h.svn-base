@@ -1,0 +1,14 @@
+//
+//  DBTool.h
+//  TongNianProject
+//
+//  Created by etouch on 14-1-7.
+//  Copyright (c) 2014年 etouch. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import "HTTPConnection.h"
+
+@interface DBTool : NSObject
++ (void)insertData;
+@end

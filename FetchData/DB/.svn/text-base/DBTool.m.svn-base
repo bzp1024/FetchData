@@ -1,0 +1,248 @@
+//
+//  DBTool.m
+//  TongNianProject
+//
+//  Created by etouch on 14-1-7.
+//  Copyright (c) 2014年 etouch. All rights reserved.
+//
+
+#import "DBTool.h"
+#import "DBBaseHelper.h"
+#import "AFJSONRequestOperation.h"
+
+@implementation DBTool
+
+/*
+ 
+
+ ""
+ ""
+ ""
+ ""
+ "http://ado2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/f13826c260bf9e90cdae24b002f6ad5a.mp3"
+ 
+ "http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/f58c3679774b70440620b3e76b35481d.jpg"
+ "http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/c7948da5889a7bf1c5ae8dc7e12ebbf1.jpg"
+ "http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/a8a54dd5f202cf6db8c9f582fa87b316.jpg"
+ "http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/33028d793ca1de4039a5e21cd22c0c36.jpg"
+ "http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/7abc464d6c427bf8d6538376dc6fe799.jpg"
+ "http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/684dae2acf9ed1e57d4ef631dbe85149.jpg"
+ "http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/3fb103a23fae17e9130116d8f5ca3f31.jpg"
+ "http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/4d7aee01e588e8ceb953f311fc3c7086.jpg"
+ "http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/1eefff1775abdd90a3a325c3082732ef.jpg"
+ "http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/8689b6c365575ee848b679054c6edd46.jpg"
+ "http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/84c3535784c4c5fd3f6daad074e33345.jpg"
+ "http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/531a6bece4311a8ea6be78f184c7ed7b.jpg"
+ "http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/1255089265b8e107761027157c832bf4.jpg"
+ "http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/03b66c2e5e59b00f250c8550e0312dd0.jpg"
+ ""
+ ""
+ ""
+ */
+/*
+ for(int j = 0 ; j < 20; j++){
+ DataShowBean* showBean = [[DataShowBean alloc] init];
+ NSMutableArray*  tempArray = [[NSMutableArray alloc] init];
+ for(int i = 0; i < arc4random_uniform(9) + 1; i++){
+ unsigned int  index = arc4random_uniform((unsigned int)imgArray.count - 1);
+ NSMutableDictionary*  dic = [NSMutableDictionary dictionary];
+ NSString* url = [imgArray objectAtIndex:index];
+ if(url != nil && ![url isEqualToString:@""]){
+ [dic setObject:url forKey:@"url"];
+ [dic setObject:@"图片的描述" forKey:@"text"];
+ }else {
+ continue;
+ }
+ [tempArray addObject:dic];
+ }
+ showBean._note = @"图集的备注";
+ showBean._title = @"图集的主题";
+ showBean._image = [tempArray JSONString];
+ [[DBManager shared].__dbBase base_insert:showBean];
+ }
+
+ */
+
+
+
++ (void)test{
+    
+    
+        NSString* stringUrl = [NSString stringWithFormat:@"http://localhost:8080/Test/HelloServlet?start=%d&end=%d",81,89];
+        NSMutableURLRequest* request  = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:stringUrl]];
+        AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request
+                                                                                            success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+                                                                                                
+                                                                                                NSDictionary*  dic = JSON;
+                                                                                                NSArray*       imgArray = [dic objectForKey:@"jsonArray"];
+                                                                                                
+                                                                                                for(NSDictionary*  array in imgArray){
+                                                                                                    [[DBManager shared].__dbBase base_insert_school_grade:array];
+                                                                                                }
+                                                                                                
+                                                                                            }
+                                                                                            failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+                                                                                                UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Weather"
+                                                                                                                                             message:[NSString stringWithFormat:@"%@",error]
+                                                                                                                                            delegate:nil
+                                                                                                                                   cancelButtonTitle:@"OK" otherButtonTitles:nil];
+                                                                                                [av show];
+                                                                                            }];
+        
+        [operation start];
+
+    
+}
+
+
+- (void)test1{
+    
+    
+}
+
+
++ (void)insertData{
+    
+    //[[self class] test];
+//
+//    NSString* stringUrl = @"http://localhost:8080/Test/HelloServlet?start=241&end=270";
+//    NSMutableURLRequest* request  = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:stringUrl]];
+//    AFJSONRequestOperation *operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request
+//                                                    success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+//                                                        
+//                                                        NSDictionary*  dic = JSON;
+//                                                        NSArray*       imgArray = [dic objectForKey:@"jsonArray"];
+//                                                        
+//                                                        for(NSArray*  array in imgArray){
+//                                                            [[DBManager shared].__dbBase base_insert_sc:array];
+//                                                        }
+//                                                        
+//                                                    }
+//                                                    failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+//                                                        UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Weather"
+//                                                                                                     message:[NSString stringWithFormat:@"%@",error]
+//                                                                                                    delegate:nil
+//                                                                                           cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//                                                        [av show];
+//                                                    }];
+//    
+//    [operation start];
+//
+//    
+//    stringUrl = @"http://localhost:8080/Test/HelloServlet?start=271&end=286";
+//    request  = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:stringUrl]];
+//    operation = [AFJSONRequestOperation JSONRequestOperationWithRequest:request
+//                                                                                        success:^(NSURLRequest *request, NSHTTPURLResponse *response, id JSON) {
+//                                                                                            
+//                                                                                            NSDictionary*  dic = JSON;
+//                                                                                            NSArray*       imgArray = [dic objectForKey:@"jsonArray"];
+//                                                                                            
+//                                                                                            for(NSArray*  array in imgArray){
+//                                                                                                [[DBManager shared].__dbBase base_insert_sc:array];
+//                                                                                            }
+//                                                                                            
+//                                                                                        }
+//                                                                                        failure:^(NSURLRequest *request, NSHTTPURLResponse *response, NSError *error, id JSON) {
+//                                                                                            UIAlertView *av = [[UIAlertView alloc] initWithTitle:@"Error Retrieving Weather"
+//                                                                                                                                         message:[NSString stringWithFormat:@"%@",error]
+//                                                                                                                                        delegate:nil
+//                                                                                                                               cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//                                                                                            [av show];
+//                                                                                        }];
+//    
+//    [operation start];
+    
+    
+    
+//    DataShowBean* showBean = [[DataShowBean alloc] init];
+//    NSMutableArray*  tempArray = [[NSMutableArray alloc] init];
+//    NSMutableDictionary*  dic = [NSMutableDictionary dictionary];
+//    
+//    [dic setObject:@"http://a3.qpic.cn/psb?/V10h2kfL1YAZvh/7SWUym3oobQ6e7XLFzI1O9q8AScNCCEJyFabJV571ZQ!/c/dPlTyZlODAAA&bo=kwEWAZMBFgEBACc!&rf=0-18" forKey:@"url"];
+//    [dic setObject:@"图片的描述" forKey:@"text"];
+//    [tempArray addObject:dic];
+//    
+//    
+//   
+//    showBean._note = @"图集的备注";
+//    showBean._title = @"图集的主题";
+//    showBean._image = [tempArray JSONString];
+//    [[DBManager shared].__dbBase base_insert:showBean];
+//
+//    
+//    showBean = [[DataShowBean alloc] init];
+//    tempArray = [[NSMutableArray alloc] init];
+//    dic = [NSMutableDictionary dictionary];
+//    
+//    [dic setObject:@"http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/4fde3b418c372bed67135e78c7f6cb8c.jpg" forKey:@"url"];
+//    [dic setObject:@"图片的描述" forKey:@"text"];
+//    [tempArray addObject:dic];
+//    
+//    dic = [NSMutableDictionary dictionary];
+//    [dic setObject:@"http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/ee09557eb46bbd96a9f301ebc9134926.jpg" forKey:@"url"];
+//    [dic setObject:@"图片的描述" forKey:@"text"];
+//    [tempArray addObject:dic];
+//    
+//    dic = [NSMutableDictionary dictionary];
+//    [dic setObject:@"http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/351cea78c84fe3256c3663b482cb1315.jpg" forKey:@"url"];
+//    [dic setObject:@"图片的描述" forKey:@"text"];
+//    [tempArray addObject:dic];
+//    
+//    dic = [NSMutableDictionary dictionary];
+//    [dic setObject:@"http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/b02cfdb167abb727e11c07edb6830aee.jpg" forKey:@"url"];
+//    [dic setObject:@"图片的描述" forKey:@"text"];
+//    [tempArray addObject:dic];
+//    
+//    showBean._note = @"图集的备注";
+//    showBean._title = @"图集的主题";
+//    showBean._image = [tempArray JSONString];
+//    [[DBManager shared].__dbBase base_insert:showBean];
+//    
+//    
+//    for(int  i = 0; i < 10; i++){
+//        showBean = [[DataShowBean alloc] init];
+//        tempArray = [[NSMutableArray alloc] init];
+//        dic = [NSMutableDictionary dictionary];
+//        
+//        [dic setObject:@"http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/1102e1ef9725ef2203c3e27c836a79da.jpg" forKey:@"url"];
+//        [dic setObject:@"图片的描述" forKey:@"text"];
+//        [tempArray addObject:dic];
+//        
+//        dic = [NSMutableDictionary dictionary];
+//        [dic setObject:@"http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/12b0872ce32aeb9ac0284e26090ddc80.jpg" forKey:@"url"];
+//        [dic setObject:@"图片的描述" forKey:@"text"];
+//        [tempArray addObject:dic];
+//        
+//        dic = [NSMutableDictionary dictionary];
+//        [dic setObject:@"http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/90b77ebf1d80bab3aa16843f817b1b1c.jpg" forKey:@"url"];
+//        [dic setObject:@"图片的描述" forKey:@"text"];
+//        [tempArray addObject:dic];
+//        
+//        dic = [NSMutableDictionary dictionary];
+//        [dic setObject:@"http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/87fefc0b345c6a39aab97f3e92cfb465.jpg" forKey:@"url"];
+//        [dic setObject:@"图片的描述" forKey:@"text"];
+//        [tempArray addObject:dic];
+//        
+//        dic = [NSMutableDictionary dictionary];
+//        [dic setObject:@"http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/b56e72a1d123b15257cf8ddf46c5b790.jpg" forKey:@"url"];
+//        [dic setObject:@"图片的描述" forKey:@"text"];
+//        [tempArray addObject:dic];
+//        
+//        dic = [NSMutableDictionary dictionary];
+//        [dic setObject:@"http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/8f55688e39ce021e754f22b1b5865a6e.jpg" forKey:@"url"];
+//        [dic setObject:@"图片的描述" forKey:@"text"];
+//        [tempArray addObject:dic];
+//        
+//        dic = [NSMutableDictionary dictionary];
+//        [dic setObject:@"http://img2001.static.suishenyun.net/4342fd0c8524c1d843380489895cf0a8/6510935746b82e71dbb00260e98ea228.jpg" forKey:@"url"];
+//        [dic setObject:@"图片的描述" forKey:@"text"];
+//        [tempArray addObject:dic];
+//        
+//        showBean._note = @"图集的备注";
+//        showBean._title = @"图集的主题";
+//        showBean._image = [tempArray JSONString];
+//        [[DBManager shared].__dbBase base_insert:showBean];
+//    }
+    
+}
+@end

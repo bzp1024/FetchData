@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/p/tongnianjiyi/code-0/!svn/ver/43/TongNianProject/Model/DB
+END
+DBBaseHelper.h
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/p/tongnianjiyi/code-0/!svn/ver/47/TongNianProject/Model/DB/DBBaseHelper.h
+END
+DBHelperDefine.h
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/p/tongnianjiyi/code-0/!svn/ver/7/TongNianProject/Model/DB/DBHelperDefine.h
+END
+DBManager.h
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/p/tongnianjiyi/code-0/!svn/ver/7/TongNianProject/Model/DB/DBManager.h
+END
+DBTool.h
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/p/tongnianjiyi/code-0/!svn/ver/47/TongNianProject/Model/DB/DBTool.h
+END
+DBBaseHelper.m
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/p/tongnianjiyi/code-0/!svn/ver/47/TongNianProject/Model/DB/DBBaseHelper.m
+END
+DBManager.m
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/p/tongnianjiyi/code-0/!svn/ver/7/TongNianProject/Model/DB/DBManager.m
+END
+DBTool.m
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/p/tongnianjiyi/code-0/!svn/ver/47/TongNianProject/Model/DB/DBTool.m
+END

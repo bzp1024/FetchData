@@ -1,0 +1,26 @@
+//
+//  DBBaseHelper.h
+//  TongNianProject
+//
+//  Created by etouch on 13-12-25.
+//  Copyright (c) 2013年 etouch. All rights reserved.
+//
+
+#import <Foundation/Foundation.h>
+#import <sqlite3.h>
+#import "DataQuestionBean.h"
+#import "DataShowBean.h"
+
+@interface DBBaseHelper : NSObject{
+    @private
+        sqlite3 *__dbHander;
+}
+- (NSArray*)base_getAllShowDatas;
+- (BOOL)base_insert:(DataShowBean*)showBean;
+- (BOOL)base_insert_en:(NSArray*)array;
+- (BOOL)base_insert_sc:(NSArray*)array;
+
+- (BOOL)base_insert_school_grade:(NSDictionary*)dic;
+
+- (NSArray*)baseGetschoolGrade:(int)
+@end

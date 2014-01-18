@@ -1,0 +1,258 @@
+//
+//  DBBaseHelper.m
+//  TongNianProject
+//
+//  Created by etouch on 13-12-25.
+//  Copyright (c) 2013年 etouch. All rights reserved.
+//
+
+#import "DBBaseHelper.h"
+
+@implementation DBBaseHelper
+- (id)init{
+    if (self = [super init]){
+        if (NULL == __dbHander) {
+            NSString *dbPath = [NSString stringWithFormat:@"%@/%@",__gDocmentPath,@"MyDB"];
+            int retVal = sqlite3_open_v2([dbPath UTF8String],&__dbHander,SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE|SQLITE_OPEN_FULLMUTEX,NULL);
+            if (SQLITE_OK == retVal) {
+                //创建表
+                [self createTable];
+            }
+        }
+    }
+    return self;
+}
+
+- (void)createTable{
+    
+    NSString *sql = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS \
+                     '%@' (\
+                     '%@' INTEGER PRIMARY KEY AUTOINCREMENT, \
+                     '%@' INTEGER DEFAULT 0, \
+                     '%@' TEXT,\
+                     '%@' TEXT,\
+                     '%@' TEXT)"
+                     ,KTBDataShowTable,KTBShow_id,KTBShow_sid,KTBShow_title,KTBShow_note,KTBShow_image];
+    int retVal = sqlite3_exec(__dbHander,[sql UTF8String],NULL,NULL,NULL);
+    if (SQLITE_OK != retVal) {
+        
+    }
+    
+    sql = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS \
+           '%@' (\
+           '%@' INTEGER PRIMARY KEY AUTOINCREMENT, \
+           '%@' INTEGER DEFAULT 0, \
+           '%@' INTEGER DEFAULT 0, \
+           '%@' TEXT,\
+           '%@' TEXT,\
+           '%@' TEXT)"
+           ,KTBDataQuestionTable,KTBQuestion_id,KTBQuestion_sid,KTBQuestion_type,KTBQuestion_title,KTBQuestion_selectanswers,KTBQuestion_answer];
+    retVal = sqlite3_exec(__dbHander,[sql UTF8String],NULL,NULL,NULL);
+    if (SQLITE_OK != retVal) {
+        
+    }
+    
+    sql = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS \
+           '%@' (\
+           '%@' INTEGER PRIMARY KEY AUTOINCREMENT, \
+           '%@'  TEXT,\
+           '%@'  TEXT,\
+           '%@' TEXT,\
+           '%@' TEXT,\
+           '%@' TEXT)"
+           ,@"EntranceTable",@"id",@"place",@"year",@"subject",@"xueli",@"grade"];
+    retVal = sqlite3_exec(__dbHander,[sql UTF8String],NULL,NULL,NULL);
+    if (SQLITE_OK != retVal) {
+        
+    }
+    
+    sql = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS \
+           '%@' (\
+           '%@' INTEGER PRIMARY KEY AUTOINCREMENT, \
+           '%@'  TEXT,\
+           '%@'  TEXT,\
+           '%@' TEXT,\
+           '%@' TEXT,\
+           '%@' TEXT,\
+           '%@' TEXT)"
+           ,@"SchoolTable",@"id",@"name",@"place",@"xueli",@"jiaoyubu",@"985gonc",@"211gongc"];
+    retVal = sqlite3_exec(__dbHander,[sql UTF8String],NULL,NULL,NULL);
+    if (SQLITE_OK != retVal) {
+        
+    }
+    /*
+     "北京大学",
+     "北京",
+     "普通本科",
+     "教育部直属",
+     "985工程",
+     "211工程"
+     */
+    
+    sql = [NSString stringWithFormat:@"CREATE TABLE IF NOT EXISTS \
+           '%@' (\
+           '%@' INTEGER PRIMARY KEY AUTOINCREMENT, \
+           '%@' TEXT,\
+           '%@' TEXT,\
+           '%@' TEXT,\
+           '%@' TEXT)"
+           ,@"SchoolGradeTable",@"id",@"shcoolname",@"schoolplace",@"geshengfenshu",@"gezhuanyefenshu"];
+    retVal = sqlite3_exec(__dbHander,[sql UTF8String],NULL,NULL,NULL);
+    if (SQLITE_OK != retVal) {
+        
+    }
+    
+    
+}
+
+- (BOOL)base_insert_sc:(NSArray*)array{
+    NSString *sql = [NSString stringWithFormat:@"INSERT INTO '%@' \
+                     ('%@','%@','%@','%@','%@','%@') VALUES\
+                     (?,?,?,?,?,?)",@"SchoolTable",@"name",@"place",@"xueli",@"jiaoyubu",@"985gonc",@"211gongc"];
+    sqlite3_stmt *stmt;
+    int retVal = sqlite3_prepare_v2(__dbHander,[sql UTF8String],-1,&stmt,NULL);
+    if (SQLITE_OK != retVal) {
+        sqlite3_finalize(stmt);
+        return NO;
+    }
+    int i = 1;
+    for(NSString*  xx  in array){
+        if([xx isEqualToString:@"×"]){
+            sqlite3_bind_text(stmt, i,  [@"" UTF8String],-1,NULL);
+        }else {
+            sqlite3_bind_text(stmt, i,  [xx UTF8String],-1,NULL);
+        }
+        i++;
+    }
+    if (SQLITE_DONE != sqlite3_step(stmt)) {
+        sqlite3_finalize(stmt);
+        return NO;
+    }else {
+        
+        sqlite3_finalize(stmt);
+        return YES;
+    }
+    sqlite3_finalize(stmt);
+    return YES;
+}
+
+- (BOOL)base_insert_en:(NSArray*)array{
+    NSString *sql = [NSString stringWithFormat:@"INSERT INTO '%@' \
+                     ('%@','%@','%@','%@','%@') VALUES\
+                     (?,?,?,?,?)",@"EntranceTable",@"place",@"year",@"subject",@"xueli",@"grade"];
+    sqlite3_stmt *stmt;
+    int retVal = sqlite3_prepare_v2(__dbHander,[sql UTF8String],-1,&stmt,NULL);
+    if (SQLITE_OK != retVal) {
+        sqlite3_finalize(stmt);
+        return NO;
+    }
+    
+    int i = 1;
+    for(NSString*  xx  in array){
+        sqlite3_bind_text(stmt, i,  [xx UTF8String],-1,NULL);
+        i++;
+    }
+    if (SQLITE_DONE != sqlite3_step(stmt)) {
+        sqlite3_finalize(stmt);
+        return NO;
+    }else {
+     
+        sqlite3_finalize(stmt);
+        return YES;
+    }
+    sqlite3_finalize(stmt);
+    return YES;
+}
+
+- (BOOL)base_insert_school_grade:(NSDictionary*)dic{
+    NSString *sql = [NSString stringWithFormat:@"INSERT INTO '%@' \
+                     ('%@','%@','%@','%@') VALUES\
+                     (?,?,?,?)",@"SchoolGradeTable",@"shcoolname",@"schoolplace",@"geshengfenshu",@"gezhuanyefenshu"];
+    sqlite3_stmt *stmt;
+    int retVal = sqlite3_prepare_v2(__dbHander,[sql UTF8String],-1,&stmt,NULL);
+    if (SQLITE_OK != retVal) {
+        sqlite3_finalize(stmt);
+        return NO;
+    }
+
+    
+    sqlite3_bind_text(stmt, 1,  [[dic objectForKey:@"schoolname"] UTF8String],-1,NULL);
+    sqlite3_bind_text(stmt, 2,  [[dic objectForKey:@"schoolplace"] UTF8String],-1,NULL);
+    sqlite3_bind_text(stmt, 3,  [[dic objectForKey:@"geshengfenshu"] UTF8String],-1,NULL);
+    sqlite3_bind_text(stmt, 4,  [[dic objectForKey:@"gezhuanyefenshu"] UTF8String],-1,NULL);
+    
+//    int i = 1;
+//    for(NSString*  xx  in array){
+//        sqlite3_bind_text(stmt, i,  [xx UTF8String],-1,NULL);
+//        i++;
+//    }
+    if (SQLITE_DONE != sqlite3_step(stmt)) {
+        sqlite3_finalize(stmt);
+        return NO;
+    }else {
+        
+        sqlite3_finalize(stmt);
+        return YES;
+    }
+    sqlite3_finalize(stmt);
+    return YES;
+}
+
+- (BOOL)base_insert:(DataShowBean*)showBean{
+    
+    NSString *sql = [NSString stringWithFormat:@"INSERT INTO '%@' \
+                     ('%@','%@','%@','%@') VALUES\
+                     (?,?,?,?)",KTBDataShowTable,KTBShow_sid,KTBShow_title,KTBShow_note,KTBShow_image];
+    sqlite3_stmt *stmt;
+    int retVal = sqlite3_prepare_v2(__dbHander,[sql UTF8String],-1,&stmt,NULL);
+    if (SQLITE_OK != retVal) {
+        sqlite3_finalize(stmt);
+        return NO;
+    }
+    sqlite3_bind_int(stmt,1,  showBean._sid);
+    sqlite3_bind_text(stmt, 2,  [showBean._title UTF8String],-1,NULL);
+    sqlite3_bind_text(stmt, 3,  [showBean._note  UTF8String],-1,NULL);
+    sqlite3_bind_text(stmt, 4,  [showBean._image UTF8String],-1,NULL);
+    if (SQLITE_DONE != sqlite3_step(stmt)) {
+        sqlite3_finalize(stmt);
+        return NO;
+    }else {
+        showBean._id = sqlite3_last_insert_rowid(__dbHander);
+        sqlite3_finalize(stmt);
+        return YES;
+    }
+    sqlite3_finalize(stmt);
+    return YES;
+
+}
+
+- (NSArray*)base_getAllShowDatas{
+    
+    sqlite3_exec(__dbHander, [@"BEGIN TRANSACTION" UTF8String], NULL, NULL, NULL);
+    NSString*  sql = [NSString stringWithFormat:@"select * from %@",KTBDataShowTable];
+    sqlite3_stmt *stmt;
+    
+    int retVal = sqlite3_prepare_v2(__dbHander,[sql UTF8String],-1,&stmt,NULL);
+    if (SQLITE_OK != retVal) {
+        sqlite3_finalize(stmt);
+        return nil;
+    }
+    
+    NSMutableArray *retArray = [[NSMutableArray alloc] init];
+    while (SQLITE_ROW == sqlite3_step(stmt)){
+        
+        DataShowBean*  showBean = [[DataShowBean alloc] init];
+        showBean._id = sqlite3_column_int(stmt, 0);
+        showBean._sid = sqlite3_column_int64(stmt, 1);
+        showBean._title = [NSString stringWithUTF8String:(char *)sqlite3_column_text(stmt, 2)];
+        showBean._note = [NSString stringWithUTF8String:(char *)sqlite3_column_text(stmt, 3)];
+        showBean._image = [NSString stringWithUTF8String:(char *)sqlite3_column_text(stmt, 4)];
+        [retArray addObject:showBean];
+    }
+    sqlite3_finalize(stmt);
+    sqlite3_exec(__dbHander, [@"COMMIT TRANSACTION" UTF8String], NULL, NULL, NULL);
+    return retArray;
+}
+
+
+@end
