@@ -170,6 +170,9 @@
 }
 
 
+
+
+
 - (BOOL)base_insert_sc:(NSArray*)array{
     NSString *sql = [NSString stringWithFormat:@"INSERT INTO '%@' \
                      ('%@','%@','%@','%@','%@','%@') VALUES\
